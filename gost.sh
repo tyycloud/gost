@@ -66,7 +66,7 @@ function Install_ct() {
   check_file
   check_sys
   rm -rf gost-linux-"$bit"-"$ct_new_ver".gz
-  wget --no-check-certificate https://github.com/tyycloud/gost/download/gost-linux-"$bit"-"$ct_new_ver".gz
+  wget --no-check-certificate https://raw.githubusercontent.com/tyycloud/gost/main/download/gost-linux-"$bit"-"$ct_new_ver".gz
   gunzip gost-linux-"$bit"-"$ct_new_ver".gz
   mv gost-linux-"$bit"-"$ct_new_ver" gost
   mv gost /usr/bin/gost
