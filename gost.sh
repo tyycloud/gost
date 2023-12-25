@@ -3,9 +3,10 @@ Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_p
 Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 shell_version="1.1.1"
-ct_new_ver="2.11.2"
+ct_new_ver="2.11.2" # 2.x 不再跟随官方更新
 gost_conf_path="/etc/gost/config.json"
 raw_conf_path="/etc/gost/rawconf"
+
 function check_sys() {
   if [[ -f /etc/redhat-release ]]; then
     release="centos"
@@ -65,14 +66,29 @@ function Install_ct() {
   Installation_dependency
   check_file
   check_sys
-  rm -rf gost-linux-"$bit"-"$ct_new_ver".gz
-  wget --no-check-certificate https://raw.githubusercontent.com/tyycloud/gost/main/download/gost-linux-"$bit"-"$ct_new_ver".gz
-  gunzip gost-linux-"$bit"-"$ct_new_ver".gz
-  mv gost-linux-"$bit"-"$ct_new_ver" gost
-  mv gost /usr/bin/gost
-  chmod -R 777 /usr/bin/gost
-  wget --no-check-certificate https://raw.githubusercontent.com/tyycloud/gost/master/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
-  mkdir /etc/gost && wget --no-check-certificate https://raw.githubusercontent.com/tyycloud/gost/master/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
+  echo -e "若为国内机器建议使用大陆镜像加速下载"
+  read -e -p "是否使用？[y/n]:" addyn
+  [[ -z ${addyn} ]] && addyn="n"
+  if [[ ${addyn} == [Yy] ]]; then
+    rm -rf gost-linux-"$bit"-"$ct_new_ver".gz
+    wget --no-check-certificate https://gitee.com/lukerxy/gost/raw/master/download/gost-linux-"$bit"-"$ct_new_ver".gz
+    gunzip gost-linux-"$bit"-"$ct_new_ver".gz
+    mv gost-linux-"$bit"-"$ct_new_ver" gost
+    mv gost /usr/bin/gost
+    chmod -R 777 /usr/bin/gost
+    wget --no-check-certificate https://gitee.com/lukerxy/gost/raw/master/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
+    mkdir /etc/gost && wget --no-check-certificate https://gitee.com/lukerxy/gost/raw/master/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
+  else
+    rm -rf gost-linux-"$bit"-"$ct_new_ver".gz
+    wget --no-check-certificate https://raw.githubusercontent.com/tyycloud/gost/master/download/gost-linux-"$bit"-"$ct_new_ver".gz
+    gunzip gost-linux-"$bit"-"$ct_new_ver".gz
+    mv gost-linux-"$bit"-"$ct_new_ver" gost
+    mv gost /usr/bin/gost
+    chmod -R 777 /usr/bin/gost
+    wget --no-check-certificate https://raw.githubusercontent.com/tyycloud/gost/master/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
+    mkdir /etc/gost && wget --no-check-certificate https://raw.githubusercontent.com/tyycloud/gost/master/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
+  fi
+
   systemctl enable gost && systemctl restart gost
   echo "------------------------------"
   if test -a /usr/bin/gost -a /usr/lib/systemctl/gost.service -a /etc/gost/config.json; then
@@ -253,7 +269,7 @@ function read_d_ip() {
     echo -e "------------------------------------------------------------------"
     echo -e "请问你要将本机从${flag_b}接收到的流量转发向哪个IP或域名?"
     echo -e "注: IP既可以是[远程机器/当前机器]的公网IP, 也可是以本机本地回环IP(即127.0.0.1)"
-    echo -e "具体IP地址的填写, 取决于接收该流量的服务正在监听的IP(详见: https://github.com/KANIKIG/Multi-EasyGost)"
+    echo -e "具体IP地址的填写, 取决于接收该流量的服务正在监听的IP"
     if [[ ${is_cert} == [Yy] ]]; then
       echo -e "注意: 落地机开启自定义tls证书，务必填写${Red_font_prefix}域名${Font_color_suffix}"
     fi
@@ -828,28 +844,30 @@ cron_restart() {
   fi
 }
 
+
 echo && echo -e "                 gost 一键安装配置脚本"${Red_font_prefix}[${shell_version}]${Font_color_suffix}"
-  ----------- tyycloud -----------
+  ----------- GOST -----------
   特性: (1)本脚本采用systemd及gost配置文件对gost进行管理
         (2)能够在不借助其他工具(如screen)的情况下实现多条转发规则同时生效
         (3)机器reboot后转发不失效
   功能: (1)tcp+udp不加密转发, (2)中转机加密转发, (3)落地机解密对接转发
 
  ${Green_font_prefix}1.${Font_color_suffix} 安装 gost
- ${Green_font_prefix}2.${Font_color_suffix} 卸载 gost
+ ${Green_font_prefix}2.${Font_color_suffix} 更新 gost
+ ${Green_font_prefix}3.${Font_color_suffix} 卸载 gost
 ————————————
- ${Green_font_prefix}3.${Font_color_suffix} 启动 gost
- ${Green_font_prefix}4.${Font_color_suffix} 停止 gost
- ${Green_font_prefix}5.${Font_color_suffix} 重启 gost
+ ${Green_font_prefix}4.${Font_color_suffix} 启动 gost
+ ${Green_font_prefix}5.${Font_color_suffix} 停止 gost
+ ${Green_font_prefix}6.${Font_color_suffix} 重启 gost
 ————————————
- ${Green_font_prefix}6.${Font_color_suffix} 新增gost转发配置
- ${Green_font_prefix}7.${Font_color_suffix} 查看现有gost配置
- ${Green_font_prefix}8.${Font_color_suffix} 删除一则gost配置
+ ${Green_font_prefix}7.${Font_color_suffix} 新增gost转发配置
+ ${Green_font_prefix}8.${Font_color_suffix} 查看现有gost配置
+ ${Green_font_prefix}9.${Font_color_suffix} 删除一则gost配置
 ————————————
- ${Green_font_prefix}9.${Font_color_suffix} gost定时重启配置
- ${Green_font_prefix}10.${Font_color_suffix} 自定义TLS证书配置
+ ${Green_font_prefix}10.${Font_color_suffix} gost定时重启配置
+ ${Green_font_prefix}11.${Font_color_suffix} 自定义TLS证书配置
 ————————————" && echo
-read -e -p " 请输入数字 [1-9]:" num
+read -e -p " 请输入数字 [1-10]:" num
 case "$num" in
 1)
   Install_ct
@@ -902,6 +920,6 @@ case "$num" in
   cert
   ;;
 *)
-  echo "请输入正确数字 [1-9]"
+  echo "请输入正确数字 [1-10]"
   ;;
 esac
