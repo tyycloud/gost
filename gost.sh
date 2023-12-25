@@ -853,19 +853,18 @@ echo && echo -e "                 gost 一键安装配置脚本"${Red_font_prefi
   功能: (1)tcp+udp不加密转发, (2)中转机加密转发, (3)落地机解密对接转发
 
  ${Green_font_prefix}1.${Font_color_suffix} 安装 gost
- ${Green_font_prefix}2.${Font_color_suffix} 更新 gost
- ${Green_font_prefix}3.${Font_color_suffix} 卸载 gost
+ ${Green_font_prefix}2.${Font_color_suffix} 卸载 gost
 ————————————
- ${Green_font_prefix}4.${Font_color_suffix} 启动 gost
- ${Green_font_prefix}5.${Font_color_suffix} 停止 gost
- ${Green_font_prefix}6.${Font_color_suffix} 重启 gost
+ ${Green_font_prefix}3.${Font_color_suffix} 启动 gost
+ ${Green_font_prefix}4.${Font_color_suffix} 停止 gost
+ ${Green_font_prefix}5.${Font_color_suffix} 重启 gost
 ————————————
- ${Green_font_prefix}7.${Font_color_suffix} 新增gost转发配置
- ${Green_font_prefix}8.${Font_color_suffix} 查看现有gost配置
- ${Green_font_prefix}9.${Font_color_suffix} 删除一则gost配置
+ ${Green_font_prefix}6.${Font_color_suffix} 新增gost转发配置
+ ${Green_font_prefix}7.${Font_color_suffix} 查看现有gost配置
+ ${Green_font_prefix}8.${Font_color_suffix} 删除一则gost配置
 ————————————
- ${Green_font_prefix}10.${Font_color_suffix} gost定时重启配置
- ${Green_font_prefix}11.${Font_color_suffix} 自定义TLS证书配置
+ ${Green_font_prefix}9.${Font_color_suffix} gost定时重启配置
+ ${Green_font_prefix}10.${Font_color_suffix} 自定义TLS证书配置
 ————————————" && echo
 read -e -p " 请输入数字 [1-10]:" num
 case "$num" in
